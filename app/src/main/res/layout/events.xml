@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Today"
+        android:id="@+id/textView"
+        android:textStyle="bold" />
+
+    <view
+        class="xyz.dchen.thegunnapp.WrappedList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/todaylist"
+        android:layout_weight="0.30" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Upcoming"
+        android:id="@+id/textView2"
+        android:textStyle="bold" />
+
+    <view
+        class="xyz.dchen.thegunnapp.WrappedList"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:id="@+id/upcominglist"
+        android:layout_weight="8.95" />
+</LinearLayout>
+</ScrollView>

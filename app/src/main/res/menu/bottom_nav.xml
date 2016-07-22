@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent">
+    <item
+        android:id="@+id/schedule_item"
+        android:icon="@drawable/ic_schedule_white_24dp"
+        android:title="Schedule" />
+    <item
+        android:id="@+id/events_item"
+        android:icon="@drawable/ic_date_range_white_24dp"
+        android:title="Events" />
+    <item
+        android:id="@+id/directory_item"
+        android:icon="@drawable/ic_perm_contact_calendar_white_24dp"
+        android:title="Staff Directory" />
+</menu>
