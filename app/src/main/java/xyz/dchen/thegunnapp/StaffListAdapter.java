@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+//custom adatper
 public class StaffListAdapter extends BaseAdapter {
     LayoutInflater mInflater;
     public class ViewHolder {
@@ -55,7 +56,6 @@ public class StaffListAdapter extends BaseAdapter {
 
         if (rowView == null) {
             rowView = mInflater.inflate(R.layout.staff_row, null);
-            // configure view holder
             viewHolder = new ViewHolder();
             viewHolder.txtTitle = (TextView) rowView.findViewById(R.id.name);
             viewHolder.txtSubTitle = (TextView) rowView.findViewById(R.id.position);
@@ -71,14 +71,11 @@ public class StaffListAdapter extends BaseAdapter {
 
 
     }
-
+    //search bar filterer
     public void filter(String charText) {
-
+        //check if typing and filter accordingly
         charText = charText.toLowerCase(Locale.getDefault());
-        System.out.println(charText);
         list.clear();
-        System.out.println(arraylist.size());
-        System.out.println(charText.length());
         if (charText.length() == 0) {
             list.addAll(arraylist);
 

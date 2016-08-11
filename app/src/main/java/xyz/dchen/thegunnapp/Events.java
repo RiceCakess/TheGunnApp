@@ -48,6 +48,7 @@ public class Events extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              final ViewGroup container,
                              final Bundle savedInstanceState) {
+        //create necessary view/listadatapers for the two list on Events tab
         View view = inflater.inflate(R.layout.events, container, false);
         todayView = (ListView) view.findViewById(R.id.todaylist);
         upcomingView = (ListView) view.findViewById(R.id.upcominglist);
@@ -58,11 +59,11 @@ public class Events extends Fragment {
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //create alert of event description and time
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
                         .setTitle(todayItems.get(position).summary)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
                             }
                         });
                 builder.setMessage(todayItems.get(position).description);
@@ -79,6 +80,7 @@ public class Events extends Fragment {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //disperse items from parsed json data to the correct lists
                         todayItems.clear();
                         upcomingItems.clear();
                         ArrayList<EventItem> items = EventItem.convertAll(MainActivity.calendar.events);
@@ -86,7 +88,6 @@ public class Events extends Fragment {
                             Date today = MainActivity.date;
                             DateFormat df = new SimpleDateFormat("MMMM dd");
                             if(eItem.getDateString().equals(df.format(today)))
-                            //if(eItem.getDateString().equals("May 27"))
                                 todayItems.add(eItem);
                             else
                                 upcomingItems.add(eItem);
@@ -102,6 +103,7 @@ public class Events extends Fragment {
         return view;
     }
 
+    //custom adapter for event row
     public class EventAdapter extends BaseAdapter {
         LayoutInflater mInflater;
 

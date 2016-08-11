@@ -15,6 +15,7 @@ public class ScheduleItem{
         return time;
     }
 
+    //convert string schedule to scheduleItem schedule
     public static ArrayList<ScheduleItem> convertSchedule(ArrayList<String> schedule){
         ArrayList<ScheduleItem> converted = new ArrayList<ScheduleItem>();
         for(String s : schedule){
@@ -26,7 +27,7 @@ public class ScheduleItem{
         }
         return converted;
     }
-
+    //match colors on gunn schedule
     public static String getRowColor(String name){
         String eventName = name.toLowerCase();
         if(eventName.contains("period a"))

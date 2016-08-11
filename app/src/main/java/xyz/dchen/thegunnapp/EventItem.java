@@ -34,6 +34,7 @@ public class EventItem {
 
     public static  ArrayList<EventItem> convertAll(ArrayList<JSONObject> events){
         ArrayList<EventItem> converted = new ArrayList<EventItem>();
+        //parsing json data from google calendar to array of eventitems
         for(JSONObject obj : events){
             try{
                 String description = obj.has("description") ? obj.getString("description") : "";

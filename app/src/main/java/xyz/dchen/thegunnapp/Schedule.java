@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Debug;
 import android.transition.Scene;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,32 +45,41 @@ public class Schedule extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+        //create necessary view/listadatapers for the two list on Events tab
         View view = inflater.inflate(R.layout.schedule, container, false);
         listView = (ListView) view.findViewById(R.id.schedule_list);
         scheduleAdapter = new ScheduleAdapter(scheduleItems,mActivity);
         listView.setAdapter(scheduleAdapter);
         final DateFormat dateFormat = new SimpleDateFormat("MMMM dd");
         final TextView motd = ((TextView) view.findViewById(R.id.motd));
+        //get schedule with callback
         MainActivity.calendar.getSchedule(new Runnable() {
             @Override
             public void run() {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //transfer items to local array and notify adapter
                         scheduleItems.clear();
                         scheduleItems.addAll(ScheduleItem.convertSchedule(MainActivity.calendar.scheduleItems));
                         ((ScheduleAdapter) listView.getAdapter()).notifyDataSetChanged();
+                        //set correct motd (top text)
                         motd.setText("Alternate Schedule (" + dateFormat.format(MainActivity.date) + ")");
                     }
                 });
 
             }
         });
-
-        motd.setText("Normal Schedule (" + dateFormat.format(MainActivity.date) + ")");
+        //set correct motd (top text)
+        Calendar c = Calendar.getInstance();
+        c.setTime(MainActivity.date);
+        if(c.get(Calendar.DAY_OF_WEEK) == 1 || c.get(Calendar.DAY_OF_WEEK) == 7)
+            motd.setText("No School! (" + dateFormat.format(MainActivity.date) + ")");
+        else
+            motd.setText("Normal Schedule (" + dateFormat.format(MainActivity.date) + ")");
         return view;
     }
-
+    //custom adapter
     public class ScheduleAdapter extends BaseAdapter {
         LayoutInflater mInflater;
 

@@ -48,7 +48,7 @@ public class StaffDirectory extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle
                                      savedInstanceState) {
-
+    //create necessary view/listadatapers for the two list on Events tab
         View view =  inflater.inflate(R.layout.staff_directory,
                 container, false);
         staff_directory = (ListView) view.findViewById(R.id.staff_list);
@@ -68,6 +68,7 @@ public class StaffDirectory extends Fragment {
     }
 
     public void createStaffInfo(final Staff s) {
+        //dialog creator when user clicks on staff member
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle(s.name);
         String message = "Phone Number: " + s.telephone + "\n" + "Email: " + s.email + "\nPosition: " + s.position + " \nDepartment: " + s.department;
@@ -98,10 +99,12 @@ public class StaffDirectory extends Fragment {
     }
 
     public void initStaffList() {
+        //parse staff list from online website
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    //read webpage and string manipulation to extract data
                     URL webpage = new URL("http://www.gunn.pausd.org/people");
                     BufferedReader read = new BufferedReader(new InputStreamReader(webpage.openStream()));
                     String line;
@@ -147,10 +150,12 @@ public class StaffDirectory extends Fragment {
     }
 
     public void dialNumber(String number) {
+        //push to call page without need to copy phonenumber
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null)));
     }
 
     public void sendEmail(String email) {
+        //create new email draft to send staff email
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
@@ -158,6 +163,7 @@ public class StaffDirectory extends Fragment {
         intent.putExtra(Intent.EXTRA_TEXT, "");
         startActivity(Intent.createChooser(intent, ""));
     }
+    //custom adapter
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -182,6 +188,7 @@ public class StaffDirectory extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String searchQuery) {
+                //filter on text change
                 listadapter.filter(searchQuery.toString().trim());
                 staff_directory.invalidate();
                 return true;
@@ -211,7 +218,7 @@ public class StaffDirectory extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    //did not write this by hand, had a script do it for me
     public void loadOfflineData(){
         stafflist.add(new Staff("Allie Ackard", "Teacher", "English", "354-8238", "aackard@pausd.org", ""));
         stafflist.add(new Staff("Laila Adle", "Vision Specialist", "Special Education", "354-8223", "ladle@pausd.org", ""));

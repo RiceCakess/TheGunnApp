@@ -40,13 +40,14 @@ public class GunnCalendar {
             @Override
             public void run() {
 
-
+                //retry every 30 seconds to get calendar data
                 while (events == null) {
                     try {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Calendar c = Calendar.getInstance();
                         c.setTime(MainActivity.date);
-                        c.add(Calendar.DATE, 5);
+                        //c.add(Calendar.DATE, 5);
+                        //grab and parse calendar data from a curl request
                         String req = "https://www.googleapis.com/calendar/v3/calendars/" + CALENDAR_ID
                                 + "/events?key=" + API_KEY
                                 + "&timeMin=" + getISOString(MainActivity.date)
@@ -59,9 +60,9 @@ public class GunnCalendar {
                         for (int i = 0; i < items.length(); i++) {
                             events.add(items.getJSONObject(i));
                         }
-                        Thread.sleep(1000);
+                        Thread.sleep(30*1000);
                     } catch (Exception e) {
-                        System.out.println("Failed to grab calendar");
+                        //System.out.println("Failed to grab calendar");
                         events = null;
                         e.printStackTrace();
 
@@ -71,6 +72,7 @@ public class GunnCalendar {
         }).start();
     }
     public void checkForEvents(final Runnable callback){
+        //loop to keep waiting for the json request thread to complete
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,6 +84,8 @@ public class GunnCalendar {
                         e.printStackTrace();
                     }
                 }
+
+                //run callback
                 if(events !=null){
                     callback.run();
                     return;
@@ -95,7 +99,7 @@ public class GunnCalendar {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                //loop to keep waiting for the json request thread to complete
                 while (events == null){
                     try{
                         Thread.sleep(200);
@@ -105,10 +109,11 @@ public class GunnCalendar {
                     }
                 }
                 try {
+                    //clear anything from default values
                     scheduleItems.clear();
                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date date = MainActivity.date;
-
+                    //loop through all events
                     for (JSONObject scheduleArr : events) {
                         String summary = scheduleArr.getString("summary");
                         String startTime = "";
@@ -118,8 +123,9 @@ public class GunnCalendar {
                         } catch (Exception e) {
                             startTime = scheduleArr.getJSONObject("start").getString("dateTime");
                         }
-
+                        //check if the event is an alternate schedule
                         if (summary.toLowerCase().contains("schedule") && startTime.contains(dateFormat.format(date))) {
+                            //add description to schedule item
                             for (String s : scheduleArr.getString("description").split("\n")) {
                                 scheduleItems.add(s);
                                 alternate = true;
@@ -133,6 +139,7 @@ public class GunnCalendar {
                 }
             }
         }).start();
+        //add default schedule regardless of whether live fetch is completed
         Calendar calendar = Calendar.getInstance();
         String schedule = defaultSchedule[calendar.get(Calendar.DAY_OF_WEEK) -1];
         for(String s : schedule.split("\n")){
