@@ -25,7 +25,7 @@ public class GunnCalendar {
             "Period A (8:25-9:45)\nBrunch (9:45-10:00)\nPeriod B (10:00-11:15)\nPeriod C (11:25-12:40)\nLunch (12:40-1:20)\nPeriod F (1:20-2:35)",
             "Period D (8:25-9:45)\nBrunch (9:45-10:00)\nFlexTime (10:00-10:50)\nPeriod E (11:00-12:15)\nLunch (12:15-12:55)\nPeriod A(12:55-2:15) \nPeriod G (2:20-3:40)",
             "Period B (8:25-9:50)\nBrunch (9:50-10:05)\nPeriod C (10:05-11:25)\nPeriod D (11:35-12:55)\nLunch (12:55-1:35)\nPeriod F (1:35-2:55)",
-            "Period E (8:25-9:50)\nBrunch (9:50-10:05)\nPeriod A (10:05-11:15)\nPeriod B (11:30-12:35)\nLunch (12:45-1:15)\nPeriod G (1:25-2:35)",
+            "Period E (8:25-9:50)\nBrunch (9:50-10:05)\nPeriod A (10:05-11:15)\nPeriod B (11:30-12:35)\nLunch (12:45-1:15)\nPeriod G (1:25-2:35)\nTutorial (2:45-3:35)",
             "Period C (8:25-9:40)\nBrunch (9:40-9:55)\nPeriod D (9:55-11:05)\nPeriod E (11:15-12:25)\nLunch (12:25-1:05)\nPeriod F (1:05-2:15)\nPeriod G (2:25-3:35)",
             "No School!"
 
@@ -46,7 +46,7 @@ public class GunnCalendar {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Calendar c = Calendar.getInstance();
                         c.setTime(MainActivity.date);
-                        //c.add(Calendar.DATE, 5);
+                        c.add(Calendar.DATE, 5);
                         //grab and parse calendar data from a curl request
                         String req = "https://www.googleapis.com/calendar/v3/calendars/" + CALENDAR_ID
                                 + "/events?key=" + API_KEY

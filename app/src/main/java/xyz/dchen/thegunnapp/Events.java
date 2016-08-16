@@ -43,6 +43,9 @@ public class Events extends Fragment {
 
         this.mActivity = act;
     }
+    public static Events newInstance() {
+        return new Events();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -60,16 +63,22 @@ public class Events extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //create alert of event description and time
-                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
-                        .setTitle(todayItems.get(position).summary)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                builder.setMessage(todayItems.get(position).description);
-                if(!todayItems.get(position).description.equals("")){
-                    builder.show();
+                try{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
+                            .setTitle(todayItems.get(position).summary)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                    builder.setMessage(todayItems.get(position).description);
+                    if(!todayItems.get(position).description.equals("")){
+                        builder.show();
+                    }
                 }
+                catch(Exception e){
+                    //quick fix
+                }
+
             }
         };
         todayView.setOnItemClickListener(listener);

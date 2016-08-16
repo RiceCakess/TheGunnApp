@@ -33,7 +33,9 @@ public class Schedule extends Fragment {
     ArrayList<ScheduleItem> scheduleItems = new ArrayList<ScheduleItem>();
     ListView listView;
     ScheduleAdapter scheduleAdapter;
-
+    public static Schedule newInstance() {
+        return new Schedule ();
+    }
     @Override
     public void onAttach(Activity act) {
         super.onAttach(act);

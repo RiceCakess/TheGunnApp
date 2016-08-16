@@ -25,6 +25,7 @@ public class ScheduleItem{
                 converted.add(new ScheduleItem(split[0].trim(), split[1].replaceAll("\\)","")));
             }
         }
+
         return converted;
     }
     //match colors on gunn schedule

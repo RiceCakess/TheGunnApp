@@ -64,9 +64,13 @@ public class StaffListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-        viewHolder.txtTitle.setText(list.get(position).name + "");
-        viewHolder.txtSubTitle.setText(list.get(position).position + " - " + list.get(position).department);
+        try {
+            viewHolder.txtTitle.setText(list.get(position).name + "");
+            viewHolder.txtSubTitle.setText(list.get(position).position + " - " + list.get(position).department);
+        }
+       catch(Exception e){
+           //catch an exception when user clicks on staff and list just updated
+       }
         return rowView;
 
 
