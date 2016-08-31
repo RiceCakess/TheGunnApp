@@ -19,6 +19,6 @@
         android:title="Staff" />
     <item
         android:id="@+id/portal_item"
-        android:icon="@drawable/ic_home_white_24dp"
-        android:title="Map" />
+        android:icon="@drawable/ic_view_headline_white_24dp"
+        android:title="Barcode" />
 </menu>

@@ -43,9 +43,6 @@ public class Events extends Fragment {
 
         this.mActivity = act;
     }
-    public static Events newInstance() {
-        return new Events();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -59,30 +56,45 @@ public class Events extends Fragment {
         upcomingAdapter = new EventAdapter(upcomingItems,mActivity);
         todayView.setAdapter(todayAdapter);
         upcomingView.setAdapter(upcomingAdapter);
-        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        todayView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //create alert of event description and time
-                try{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
-                            .setTitle(todayItems.get(position).summary)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                    builder.setMessage(todayItems.get(position).description);
-                    if(!todayItems.get(position).description.equals("")){
-                        builder.show();
-                    }
-                }
-                catch(Exception e){
-                    //quick fix
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
+                        .setTitle(todayItems.get(position).summary)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                builder.setMessage(todayItems.get(position).description);
+                if(!todayItems.get(position).description.equals("")){
+                    builder.show();
                 }
 
             }
-        };
-        todayView.setOnItemClickListener(listener);
-        upcomingView.setOnItemClickListener(listener);
+        });
+        upcomingView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //create alert of event description and time
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
+                        .setTitle(upcomingItems.get(position).summary)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                builder.setMessage(upcomingItems.get(position).description);
+                if(!upcomingItems.get(position).description.equals("")){
+                    builder.show();
+                }
+            }
+        });
+        updateEvents();
+
+        return view;
+    }
+
+    public void updateEvents(){
         MainActivity.calendar.checkForEvents(new Runnable() {
             @Override
             public void run() {
@@ -101,15 +113,12 @@ public class Events extends Fragment {
                             else
                                 upcomingItems.add(eItem);
                         }
-
-
                         ((EventAdapter) todayView.getAdapter()).notifyDataSetChanged();
                         ((EventAdapter) upcomingView.getAdapter()).notifyDataSetChanged();
                     }
                 });
             }
         });
-        return view;
     }
 
     //custom adapter for event row

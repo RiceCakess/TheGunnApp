@@ -5,11 +5,19 @@ package xyz.dchen.thegunnapp;
  */
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import java.util.EnumMap;
 
 public class Map extends Fragment {
 
@@ -21,9 +29,6 @@ public class Map extends Fragment {
 
         this.mActivity = act;
     }
-    public static Map newInstance() {
-        return new Map();
-    }
     MapImageView imageView;
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -34,7 +39,8 @@ public class Map extends Fragment {
         imageView = (MapImageView) view.findViewById(R.id.map);
         imageView.setImageResource( R.drawable.gunnmap);
         imageView.setMaxZoom(4f);
-        //imageView.setImageDrawable(getResources().getDrawable(R.drawable.gunnmap));
+
         return view;
     }
+
 }

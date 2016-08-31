@@ -20,10 +20,10 @@ import java.util.TimeZone;
  * Created by David on 7/19/2016.
  */
 public class GunnCalendar {
-    String[] defaultSchedule = {
+    static String[] defaultSchedule = {
             "No School!",
             "Period A (8:25-9:45)\nBrunch (9:45-10:00)\nPeriod B (10:00-11:15)\nPeriod C (11:25-12:40)\nLunch (12:40-1:20)\nPeriod F (1:20-2:35)",
-            "Period D (8:25-9:45)\nBrunch (9:45-10:00)\nFlexTime (10:00-10:50)\nPeriod E (11:00-12:15)\nLunch (12:15-12:55)\nPeriod A(12:55-2:15) \nPeriod G (2:20-3:40)",
+            "Period D (8:25-9:45)\nBrunch (9:45-10:00)\nFlexTime (10:00-10:50)\nPeriod E (11:00-12:15)\nLunch (12:15-12:55)\nPeriod A(12:55-2:15) \nPeriod G (2:25-3:40)",
             "Period B (8:25-9:50)\nBrunch (9:50-10:05)\nPeriod C (10:05-11:25)\nPeriod D (11:35-12:55)\nLunch (12:55-1:35)\nPeriod F (1:35-2:55)",
             "Period E (8:25-9:50)\nBrunch (9:50-10:05)\nPeriod A (10:05-11:15)\nPeriod B (11:30-12:35)\nLunch (12:45-1:15)\nPeriod G (1:25-2:35)\nTutorial (2:45-3:35)",
             "Period C (8:25-9:40)\nBrunch (9:40-9:55)\nPeriod D (9:55-11:05)\nPeriod E (11:15-12:25)\nLunch (12:25-1:05)\nPeriod F (1:05-2:15)\nPeriod G (2:25-3:35)",
@@ -33,7 +33,9 @@ public class GunnCalendar {
     String API_KEY = "AIzaSyDvy55aMfxGNdtDFSqnZTUPdce4NyF58k0";
     String CALENDAR_ID = "u5mgb2vlddfj70d7frf3r015h0@group.calendar.google.com";
     ArrayList<String> scheduleItems = new ArrayList<String>();
+    ArrayList<String> tomorrowscheduleItems = new ArrayList<String>();
     boolean alternate = false;
+    boolean tomorrow_alternate = false;
     ArrayList<JSONObject> events = null;
     public GunnCalendar(Activity mActivity){
         new Thread(new Runnable() {
@@ -62,10 +64,9 @@ public class GunnCalendar {
                         }
                         Thread.sleep(30*1000);
                     } catch (Exception e) {
-                        //System.out.println("Failed to grab calendar");
+                        System.out.println("Failed to grab calendar");
                         events = null;
                         e.printStackTrace();
-
                     }
                 }
             }
@@ -110,9 +111,12 @@ public class GunnCalendar {
                 }
                 try {
                     //clear anything from default values
-                    scheduleItems.clear();
                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date date = MainActivity.date;
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(MainActivity.date);
+                    c.add(Calendar.DATE, 1);
+                    Date tomorrow = c.getTime();
                     //loop through all events
                     for (JSONObject scheduleArr : events) {
                         String summary = scheduleArr.getString("summary");
@@ -124,13 +128,24 @@ public class GunnCalendar {
                             startTime = scheduleArr.getJSONObject("start").getString("dateTime");
                         }
                         //check if the event is an alternate schedule
-                        if (summary.toLowerCase().contains("schedule") && startTime.contains(dateFormat.format(date))) {
+                        if (summary.toLowerCase().contains("schedule") && !summary.toLowerCase().contains("back to school") && (startTime.contains(dateFormat.format(date)) || startTime.contains(dateFormat.format(tomorrow)))) {
                             //add description to schedule item
-                            for (String s : scheduleArr.getString("description").split("\n")) {
-                                scheduleItems.add(s);
-                                alternate = true;
+                            if(startTime.contains(dateFormat.format(date))) {
+                                scheduleItems.clear();
+                                for (String s : scheduleArr.getString("description").split("\n")) {
+                                    scheduleItems.add(s);
+                                    alternate = true;
+                                }
                             }
-                            callback.run();
+                            else if(startTime.contains(dateFormat.format(tomorrow))) {
+                                tomorrowscheduleItems.clear();
+                                for (String s : scheduleArr.getString("description").split("\n")) {
+                                    tomorrowscheduleItems.add(s);
+                                    tomorrow_alternate = true;
+                                }
+                            }
+                            if(alternate)
+                                callback.run();
                         }
 
                     }
@@ -146,6 +161,11 @@ public class GunnCalendar {
             scheduleItems.add(s);
             callback.run();
         }
+        String tomorrow_schedule = defaultSchedule[calendar.get(Calendar.DAY_OF_WEEK) % 7];
+        for(String s : tomorrow_schedule.split("\n")){
+            tomorrowscheduleItems.add(s);
+        }
+
     }
     private static String getISOString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);

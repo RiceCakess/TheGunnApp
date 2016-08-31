@@ -1,5 +1,9 @@
 package xyz.dchen.thegunnapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.EditText;
+
 import java.util.ArrayList;
 
 /**
@@ -18,36 +22,22 @@ public class ScheduleItem{
     //convert string schedule to scheduleItem schedule
     public static ArrayList<ScheduleItem> convertSchedule(ArrayList<String> schedule){
         ArrayList<ScheduleItem> converted = new ArrayList<ScheduleItem>();
+        SharedPreferences sharedPref = MainActivity.sharedPref;
         for(String s : schedule){
             String[] split = s.split("\\(");
-
             if(split.length == 2){
-                converted.add(new ScheduleItem(split[0].trim(), split[1].replaceAll("\\)","")));
+                //flip string to correct format
+                String editTextName = split[0].trim();
+                editTextName = editTextName.substring(editTextName.length()-1) + editTextName.substring(0,editTextName.length()-1);
+                editTextName = editTextName.toLowerCase().trim();
+                String name =  split[0].trim();
+                if(sharedPref.contains(editTextName)){
+                    name = sharedPref.getString(editTextName,null);
+                }
+                converted.add(new ScheduleItem(name, split[1].replaceAll("\\)","")));
             }
         }
 
         return converted;
-    }
-    //match colors on gunn schedule
-    public static String getRowColor(String name){
-        String eventName = name.toLowerCase();
-        if(eventName.contains("period a"))
-            return "#E57373";
-        else if(eventName.contains("period b"))
-            return "#03A9F4";
-        else if(eventName.contains("period c"))
-            return "#EF5350";
-        else if(eventName.contains("period d"))
-            return "#FFEB3B";
-        else if(eventName.contains("period e"))
-            return "#00BCD4";
-        else if(eventName.contains("period f"))
-            return "#8BC34A";
-        else if(eventName.contains("period g"))
-            return "#BA68C8";
-        else if(eventName.contains("period h"))
-            return "#607D8B";
-
-        return null;
     }
 }

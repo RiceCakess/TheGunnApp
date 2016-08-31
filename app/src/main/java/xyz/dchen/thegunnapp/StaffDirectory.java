@@ -44,9 +44,6 @@ public class StaffDirectory extends Fragment {
 
         this.mActivity = act;
     }
-    public static StaffDirectory newInstance() {
-        return new StaffDirectory();
-    }
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle

@@ -23,9 +23,6 @@ public class Portal extends Fragment {
 
         this.mActivity = act;
     }
-    public static Portal newInstance() {
-        return new Portal();
-    }
     @Override
     public View onCreateView(LayoutInflater inflater,
                              final ViewGroup container,
