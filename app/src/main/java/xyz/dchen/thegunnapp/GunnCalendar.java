@@ -127,8 +127,19 @@ public class GunnCalendar {
                         } catch (Exception e) {
                             startTime = scheduleArr.getJSONObject("start").getString("dateTime");
                         }
+                        if((summary.toLowerCase().contains("holiday") || summary.toLowerCase().contains("no students")  || summary.toLowerCase().contains("break")) && !summary.toLowerCase().contains("luncheon")){
+                            if(startTime.contains(dateFormat.format(date))) {
+                                scheduleItems.clear();
+                                scheduleItems.add("No School!");
+                            }
+                            else if(startTime.contains(dateFormat.format(tomorrow))) {
+                                tomorrowscheduleItems.clear();
+                                tomorrowscheduleItems.add("No School!");
+                            }
+                            callback.run();
+                        }
                         //check if the event is an alternate schedule
-                        if (summary.toLowerCase().contains("schedule") && !summary.toLowerCase().contains("back to school") && (startTime.contains(dateFormat.format(date)) || startTime.contains(dateFormat.format(tomorrow)))) {
+                        else if (summary.toLowerCase().contains("schedule") && !summary.toLowerCase().contains("back to school") && (startTime.contains(dateFormat.format(date)) || startTime.contains(dateFormat.format(tomorrow)))) {
                             //add description to schedule item
                             if(startTime.contains(dateFormat.format(date))) {
                                 scheduleItems.clear();

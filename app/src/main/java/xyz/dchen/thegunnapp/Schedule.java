@@ -74,7 +74,7 @@ public class Schedule extends Fragment {
                 else
                     motd.setText("Normal Schedule (" + dateFormat.format(date) + ")");
 
-                if(c.get(Calendar.DAY_OF_WEEK) == 1 || c.get(Calendar.DAY_OF_WEEK) == 7)
+                if(scheduleItems.size() == 0)
                     motd.setText("No School! (" + dateFormat.format(date) + ")");
                 progress.setVisibility(View.GONE);
                 progressText.setVisibility(View.GONE);
@@ -97,7 +97,7 @@ public class Schedule extends Fragment {
                 else
                     motd.setText("Normal Schedule (" + dateFormat.format(date) + ")");
 
-                if(c.get(Calendar.DAY_OF_WEEK) == 1 || c.get(Calendar.DAY_OF_WEEK) == 7)
+                if(scheduleItems.size() == 0)
                     motd.setText("No School! (" + dateFormat.format(date) + ")");
                 progress.setVisibility(View.VISIBLE);
                 progressText.setVisibility(View.VISIBLE);
@@ -167,7 +167,10 @@ public class Schedule extends Fragment {
                         scheduleItems.addAll(ScheduleItem.convertSchedule(MainActivity.calendar.scheduleItems));
                         ((ScheduleAdapter) listView.getAdapter()).notifyDataSetChanged();
                         //set correct motd (top text)
-                        motd.setText("Alternate Schedule (" + dateFormat.format(MainActivity.date) + ")");
+                        if(MainActivity.calendar.alternate)
+                            motd.setText("Alternate Schedule (" + dateFormat.format(MainActivity.date) + ")");
+                        if(scheduleItems.size() == 0)
+                            motd.setText("No School! (" + dateFormat.format(MainActivity.date) + ")");
                         updateProgress();
                     }
                 });
@@ -178,7 +181,7 @@ public class Schedule extends Fragment {
         //set correct motd (top text)
         Calendar c = Calendar.getInstance();
         c.setTime(MainActivity.date);
-        if(c.get(Calendar.DAY_OF_WEEK) == 1 || c.get(Calendar.DAY_OF_WEEK) == 7)
+        if(scheduleItems.size() == 0)
             motd.setText("No School! (" + dateFormat.format(MainActivity.date) + ")");
         else
             motd.setText("Normal Schedule (" + dateFormat.format(MainActivity.date) + ")");
